@@ -8,9 +8,9 @@
     {
       "siteName": "los-tules-website",
       "githubRepo": "los-tules-website",
-      "domainName": "",
-      "hostedZoneId": "",
-      "hostedZoneName": "",
+      "domainName": "lostuleskc.com",
+      "hostedZoneId": "Z01235092D2OIX9KFYPQ8",
+      "hostedZoneName": "lostuleskc.com",
       "menuPdfEnabled": true,
       "menuPdfBucketName": "los-tules-menu-files",
       "menuPdfFilename": "los-tules-menu2026.pdf"
