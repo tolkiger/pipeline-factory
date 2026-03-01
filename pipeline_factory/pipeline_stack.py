@@ -299,13 +299,13 @@ class WebsitePipelineStack(Stack):
                     value=self._site_name
                 ),
                 "DOMAIN_NAME": codebuild.BuildEnvironmentVariable(
-                    value=self._domain_name
+                    value=self._domain_name or ""
                 ),
                 "HOSTED_ZONE_ID": codebuild.BuildEnvironmentVariable(
-                    value=self._hosted_zone_id
+                    value=self._hosted_zone_id or ""
                 ),
                 "HOSTED_ZONE_NAME": codebuild.BuildEnvironmentVariable(
-                    value=self._hosted_zone_name
+                    value=self._hosted_zone_name or ""
                 ),
                 "MENU_PDF_ENABLED": codebuild.BuildEnvironmentVariable(
                     value="true" if self._menu_pdf_enabled else "false"
