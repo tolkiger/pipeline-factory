@@ -1,0 +1,16 @@
+{
+  "connectionArn": "arn:aws:codestar-connections:us-east-1:ACCOUNT:connection/ID",
+  "githubOwner": "your-github-org",
+  "defaultRegion": "us-east-1",
+  "defaultAccount": "123456789012",
+  "notificationEmail": "alerts@example.com",
+  "websites": [
+    {
+      "siteName": "los-tules-website",
+      "githubRepo": "los-tules-website",
+      "domainName": "",
+      "hostedZoneId": "",
+      "hostedZoneName": ""
+    }
+  ]
+}
