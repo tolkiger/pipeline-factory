@@ -340,3 +340,84 @@ class TestWebsitePipelineStack:
         assert stack.pipeline is not None
         assert stack.codebuild_project is not None
         assert stack.notification_topic is not None
+
+
+    def test_menu_pdf_environment_variables(self):
+        """Test that menu PDF environment variables are set correctly."""
+        app = cdk.App()
+        
+        stack = WebsitePipelineStack(
+            app,
+            "TestStack",
+            site_name="test-site",
+            github_owner="test-owner",
+            github_repo="test-repo",
+            connection_arn="arn:aws:codestar-connections:us-east-1:123456789012:connection/test",
+            menu_pdf_enabled=True,
+            menu_pdf_bucket_name="test-menu-bucket",
+            menu_pdf_filename="test-menu.pdf",
+        )
+        
+        template = assertions.Template.from_stack(stack)
+        
+        # Verify menu PDF environment variables
+        template.has_resource_properties(
+            "AWS::CodeBuild::Project",
+            {
+                "Environment": {
+                    "EnvironmentVariables": assertions.Match.array_with([
+                        assertions.Match.object_like({
+                            "Name": "MENU_PDF_ENABLED",
+                            "Value": "true",
+                        }),
+                        assertions.Match.object_like({
+                            "Name": "MENU_PDF_BUCKET_NAME",
+                            "Value": "test-menu-bucket",
+                        }),
+                        assertions.Match.object_like({
+                            "Name": "MENU_PDF_FILENAME",
+                            "Value": "test-menu.pdf",
+                        }),
+                    ])
+                }
+            }
+        )
+
+    def test_menu_pdf_disabled(self):
+        """Test that menu PDF environment variables work when disabled."""
+        app = cdk.App()
+        
+        stack = WebsitePipelineStack(
+            app,
+            "TestStack",
+            site_name="test-site",
+            github_owner="test-owner",
+            github_repo="test-repo",
+            connection_arn="arn:aws:codestar-connections:us-east-1:123456789012:connection/test",
+            menu_pdf_enabled=False,
+        )
+        
+        template = assertions.Template.from_stack(stack)
+        
+        # Verify menu PDF is disabled
+        template.has_resource_properties(
+            "AWS::CodeBuild::Project",
+            {
+                "Environment": {
+                    "EnvironmentVariables": assertions.Match.array_with([
+                        assertions.Match.object_like({
+                            "Name": "MENU_PDF_ENABLED",
+                            "Value": "false",
+                        }),
+                        assertions.Match.object_like({
+                            "Name": "MENU_PDF_BUCKET_NAME",
+                            "Value": "",
+                        }),
+                        assertions.Match.object_like({
+                            "Name": "MENU_PDF_FILENAME",
+                            "Value": "",
+                        }),
+                    ])
+                }
+            }
+        )
