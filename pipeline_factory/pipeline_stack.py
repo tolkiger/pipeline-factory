@@ -112,6 +112,17 @@ class WebsitePipelineStack(Stack):
                 subscriptions.EmailSubscription(self._notification_email)
             )
 
+        # Add policy to allow CodeStar Notifications to publish
+        topic.add_to_resource_policy(
+            iam.PolicyStatement(
+                sid="AWSCodeStarNotifications",
+                effect=iam.Effect.ALLOW,
+                principals=[iam.ServicePrincipal("codestar-notifications.amazonaws.com")],
+                actions=["SNS:Publish"],
+                resources=[topic.topic_arn],
+            )
+        )
+
         return topic
 
     def _create_codebuild_project(self) -> codebuild.Project:
@@ -230,7 +241,8 @@ class WebsitePipelineStack(Stack):
             )
         )
 
-        # Create buildspec
+        # Create buildspec with CDK CLI installation
+        # Note: Each website can customize this by modifying the pipeline stack
         buildspec = codebuild.BuildSpec.from_object({
             "version": "0.2",
             "phases": {
@@ -250,6 +262,8 @@ class WebsitePipelineStack(Stack):
                 },
                 "build": {
                     "commands": [
+                        "echo 'Installing AWS CDK CLI...'",
+                        "npm install -g aws-cdk",
                         "echo 'Building Next.js site...'",
                         "cd site",
                         "npm run build",
@@ -257,6 +271,8 @@ class WebsitePipelineStack(Stack):
                         "echo 'Installing Python dependencies...'",
                         "cd infra",
                         "pip install -r requirements.txt",
+                        "echo 'Setting PYTHONPATH for local shared-website-constructs...'",
+                        "export PYTHONPATH=\"${PYTHONPATH}:$(pwd)\"",
                         "echo 'Deploying with CDK...'",
                         "cdk deploy --all --require-approval never",
                     ],

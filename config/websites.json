@@ -1,9 +1,9 @@
 {
-  "connectionArn": "arn:aws:codestar-connections:us-east-1:ACCOUNT:connection/ID",
-  "githubOwner": "your-github-org",
+  "connectionArn": "arn:aws:codestar-connections:us-east-1:485815740327:connection/8a0201d7-d2cc-4095-b1a1-80556b74c395",
+  "githubOwner": "tolkiger",
   "defaultRegion": "us-east-1",
-  "defaultAccount": "123456789012",
-  "notificationEmail": "alerts@example.com",
+  "defaultAccount": "485815740327",
+  "notificationEmail": "admin@dtl-global.org",
   "websites": [
     {
       "siteName": "los-tules-website",
