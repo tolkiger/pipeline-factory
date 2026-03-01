@@ -33,10 +33,13 @@ def test_config_schema():
         assert "domainName" in website
         assert "hostedZoneId" in website
         assert "hostedZoneName" in website
+        assert "menuPdfEnabled" in website
+        assert "menuPdfBucketName" in website
+        assert "menuPdfFilename" in website
 
 
-def test_config_values_are_strings():
-    """Test that all config values are strings."""
+def test_config_values_are_correct_types():
+    """Test that all config values have correct types."""
     config_path = "config/websites.json"
     
     with open(config_path, "r") as f:
@@ -56,6 +59,9 @@ def test_config_values_are_strings():
         assert isinstance(website["domainName"], str)
         assert isinstance(website["hostedZoneId"], str)
         assert isinstance(website["hostedZoneName"], str)
+        assert isinstance(website["menuPdfEnabled"], bool)
+        assert isinstance(website["menuPdfBucketName"], str)
+        assert isinstance(website["menuPdfFilename"], str)
 
 
 def test_empty_domain_is_valid():
@@ -77,3 +83,23 @@ def test_empty_domain_is_valid():
     for site in empty_domain_sites:
         assert site["hostedZoneId"] == ""
         assert site["hostedZoneName"] == ""
+
+
+
+def test_menu_pdf_fields():
+    """Test that menu PDF fields are properly configured."""
+    config_path = "config/websites.json"
+    
+    with open(config_path, "r") as f:
+        config = json.load(f)
+    
+    # Find los-tules-website which should have menu PDF enabled
+    los_tules = next(
+        (w for w in config["websites"] if w["siteName"] == "los-tules-website"),
+        None
+    )
+    
+    assert los_tules is not None, "los-tules-website should exist in config"
+    assert los_tules["menuPdfEnabled"] is True
+    assert los_tules["menuPdfBucketName"] == "los-tules-menu-files"
+    assert los_tules["menuPdfFilename"] == "los-tules-menu2026.pdf"

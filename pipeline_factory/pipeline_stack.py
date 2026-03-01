@@ -37,6 +37,9 @@ class WebsitePipelineStack(Stack):
         domain_name: Optional[str] = None,
         hosted_zone_id: Optional[str] = None,
         hosted_zone_name: Optional[str] = None,
+        menu_pdf_enabled: bool = False,
+        menu_pdf_bucket_name: Optional[str] = None,
+        menu_pdf_filename: Optional[str] = None,
         notification_email: Optional[str] = None,
         **kwargs
     ) -> None:
@@ -51,6 +54,9 @@ class WebsitePipelineStack(Stack):
             domain_name: Custom domain (optional, empty string for none)
             hosted_zone_id: Route 53 hosted zone ID (optional)
             hosted_zone_name: Route 53 hosted zone name (optional)
+            menu_pdf_enabled: Whether to create menu PDF bucket (optional)
+            menu_pdf_bucket_name: Custom menu bucket name (optional)
+            menu_pdf_filename: Menu PDF filename (optional)
             notification_email: Email for pipeline failure notifications (optional)
         """
         super().__init__(scope, construct_id, **kwargs)
@@ -62,6 +68,9 @@ class WebsitePipelineStack(Stack):
         self._domain_name = domain_name or ""
         self._hosted_zone_id = hosted_zone_id or ""
         self._hosted_zone_name = hosted_zone_name or ""
+        self._menu_pdf_enabled = menu_pdf_enabled
+        self._menu_pdf_bucket_name = menu_pdf_bucket_name or ""
+        self._menu_pdf_filename = menu_pdf_filename or ""
         self._notification_email = notification_email
 
         # Create resources
@@ -281,6 +290,15 @@ class WebsitePipelineStack(Stack):
                 ),
                 "HOSTED_ZONE_NAME": codebuild.BuildEnvironmentVariable(
                     value=self._hosted_zone_name
+                ),
+                "MENU_PDF_ENABLED": codebuild.BuildEnvironmentVariable(
+                    value="true" if self._menu_pdf_enabled else "false"
+                ),
+                "MENU_PDF_BUCKET_NAME": codebuild.BuildEnvironmentVariable(
+                    value=self._menu_pdf_bucket_name
+                ),
+                "MENU_PDF_FILENAME": codebuild.BuildEnvironmentVariable(
+                    value=self._menu_pdf_filename
                 ),
             },
             build_spec=buildspec,

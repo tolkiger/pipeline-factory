@@ -43,6 +43,9 @@ def main():
         domain_name = website.get("domainName", "")
         hosted_zone_id = website.get("hostedZoneId", "")
         hosted_zone_name = website.get("hostedZoneName", "")
+        menu_pdf_enabled = website.get("menuPdfEnabled", False)
+        menu_pdf_bucket_name = website.get("menuPdfBucketName", "")
+        menu_pdf_filename = website.get("menuPdfFilename", "")
 
         # Create pipeline stack
         WebsitePipelineStack(
@@ -55,6 +58,9 @@ def main():
             domain_name=domain_name if domain_name else None,
             hosted_zone_id=hosted_zone_id if hosted_zone_id else None,
             hosted_zone_name=hosted_zone_name if hosted_zone_name else None,
+            menu_pdf_enabled=menu_pdf_enabled,
+            menu_pdf_bucket_name=menu_pdf_bucket_name if menu_pdf_bucket_name else None,
+            menu_pdf_filename=menu_pdf_filename if menu_pdf_filename else None,
             notification_email=notification_email,
             env=env,
             description=f"CI/CD Pipeline for {site_name}",

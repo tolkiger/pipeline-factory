@@ -10,7 +10,10 @@
       "githubRepo": "los-tules-website",
       "domainName": "",
       "hostedZoneId": "",
-      "hostedZoneName": ""
+      "hostedZoneName": "",
+      "menuPdfEnabled": true,
+      "menuPdfBucketName": "los-tules-menu-files",
+      "menuPdfFilename": "los-tules-menu2026.pdf"
     }
   ]
 }
