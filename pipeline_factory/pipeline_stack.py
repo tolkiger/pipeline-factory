@@ -101,9 +101,9 @@ class WebsitePipelineStack(Stack):
         """Create SNS topic for pipeline notifications."""
         topic = sns.Topic(
             self,
-            f"{self._site_name}-pipeline-notifications",
-            display_name=f"{self._site_name} Pipeline Notifications",
-            topic_name=f"{self._site_name}-pipeline-notifications",
+            "pipeline-notifications",
+            display_name="Website Pipeline Notifications",
+            topic_name=f"{self._github_repo}-pipeline-notifications",
         )
 
         # Subscribe email if provided
@@ -130,9 +130,9 @@ class WebsitePipelineStack(Stack):
         # Create CodeBuild role with necessary permissions
         role = iam.Role(
             self,
-            f"{self._site_name}-codebuild-role",
+            "codebuild-role",
             assumed_by=iam.ServicePrincipal("codebuild.amazonaws.com"),
-            description=f"CodeBuild role for {self._site_name}",
+            description="CodeBuild role for website deployment pipeline",
         )
 
         # Grant CloudFormation permissions
@@ -286,9 +286,9 @@ class WebsitePipelineStack(Stack):
         # Create CodeBuild project
         project = codebuild.Project(
             self,
-            f"{self._site_name}-build",
-            project_name=f"{self._site_name}-build",
-            description=f"Build and deploy {self._site_name}",
+            "build-project",
+            project_name=f"{self._github_repo}-build",
+            description=f"Build and deploy {self._github_repo}",
             environment=codebuild.BuildEnvironment(
                 build_image=codebuild.LinuxBuildImage.STANDARD_7_0,
                 compute_type=codebuild.ComputeType.SMALL,
@@ -349,8 +349,8 @@ class WebsitePipelineStack(Stack):
         # Create pipeline
         pipeline = codepipeline.Pipeline(
             self,
-            f"{self._site_name}-pipeline",
-            pipeline_name=f"{self._site_name}-pipeline",
+            "pipeline",
+            pipeline_name=f"{self._github_repo}-pipeline",
             pipeline_type=codepipeline.PipelineType.V2,
             stages=[
                 codepipeline.StageProps(
@@ -370,8 +370,8 @@ class WebsitePipelineStack(Stack):
         """Create notification rule for pipeline failures."""
         return notifications.CfnNotificationRule(
             self,
-            f"{self._site_name}-notification-rule",
-            name=f"{self._site_name}-pipeline-failures",
+            "notification-rule",
+            name=f"{self._github_repo}-pipeline-failures",
             detail_type="FULL",
             event_type_ids=[
                 "codepipeline-pipeline-pipeline-execution-failed",
