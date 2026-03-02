@@ -50,7 +50,7 @@ def main():
         # Create pipeline stack
         WebsitePipelineStack(
             app,
-            f"{site_name}-pipeline",
+            f"website-pipeline-{site_name}",
             site_name=site_name,
             github_owner=github_owner,
             github_repo=github_repo,
