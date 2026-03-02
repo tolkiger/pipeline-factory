@@ -47,10 +47,10 @@ def main():
         menu_pdf_bucket_name = website.get("menuPdfBucketName", "")
         menu_pdf_filename = website.get("menuPdfFilename", "")
 
-        # Create pipeline stack
+        # Create pipeline stack with generic name
         WebsitePipelineStack(
             app,
-            f"website-pipeline-{site_name}",
+            "website-mgmt-pipeline",
             site_name=site_name,
             github_owner=github_owner,
             github_repo=github_repo,
@@ -63,7 +63,7 @@ def main():
             menu_pdf_filename=menu_pdf_filename,
             notification_email=notification_email,
             env=env,
-            description=f"CI/CD Pipeline for {site_name}",
+            description="Website Management CI/CD Pipeline",
         )
 
     app.synth()

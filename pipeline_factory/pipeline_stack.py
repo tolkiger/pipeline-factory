@@ -102,8 +102,8 @@ class WebsitePipelineStack(Stack):
         topic = sns.Topic(
             self,
             "pipeline-notifications",
-            display_name="Website Pipeline Notifications",
-            topic_name=f"{self._github_repo}-pipeline-notifications",
+            display_name="Website Management Pipeline Notifications",
+            topic_name="website-mgmt-pipeline-notifications",
         )
 
         # Subscribe email if provided
@@ -287,8 +287,8 @@ class WebsitePipelineStack(Stack):
         project = codebuild.Project(
             self,
             "build-project",
-            project_name=f"{self._github_repo}-build",
-            description=f"Build and deploy {self._github_repo}",
+            project_name="website-mgmt-build",
+            description="Build and deploy websites",
             environment=codebuild.BuildEnvironment(
                 build_image=codebuild.LinuxBuildImage.STANDARD_7_0,
                 compute_type=codebuild.ComputeType.SMALL,
@@ -350,7 +350,7 @@ class WebsitePipelineStack(Stack):
         pipeline = codepipeline.Pipeline(
             self,
             "pipeline",
-            pipeline_name=f"{self._github_repo}-pipeline",
+            pipeline_name="website-mgmt-pipeline",
             pipeline_type=codepipeline.PipelineType.V2,
             stages=[
                 codepipeline.StageProps(
@@ -371,7 +371,7 @@ class WebsitePipelineStack(Stack):
         return notifications.CfnNotificationRule(
             self,
             "notification-rule",
-            name=f"{self._github_repo}-pipeline-failures",
+            name="website-mgmt-pipeline-failures",
             detail_type="FULL",
             event_type_ids=[
                 "codepipeline-pipeline-pipeline-execution-failed",
