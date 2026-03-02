@@ -14,16 +14,6 @@
       "menuPdfEnabled": true,
       "menuPdfBucketName": "los-tules-menu-files",
       "menuPdfFilename": "los-tules-menu2026.pdf"
-    },
-    {
-      "siteName": "your-new-website",
-      "githubRepo": "your-new-website",
-      "domainName": "",
-      "hostedZoneId": "",
-      "hostedZoneName": "",
-      "menuPdfEnabled": false,
-      "menuPdfBucketName": "",
-      "menuPdfFilename": ""
     }
   ]
 }
