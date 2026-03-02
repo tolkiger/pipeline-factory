@@ -55,12 +55,12 @@ def main():
             github_owner=github_owner,
             github_repo=github_repo,
             connection_arn=connection_arn,
-            domain_name=domain_name if domain_name else None,
-            hosted_zone_id=hosted_zone_id if hosted_zone_id else None,
-            hosted_zone_name=hosted_zone_name if hosted_zone_name else None,
+            domain_name=domain_name,  # Pass as-is (empty string or value)
+            hosted_zone_id=hosted_zone_id,  # Pass as-is (empty string or value)
+            hosted_zone_name=hosted_zone_name,  # Pass as-is (empty string or value)
             menu_pdf_enabled=menu_pdf_enabled,
-            menu_pdf_bucket_name=menu_pdf_bucket_name if menu_pdf_bucket_name else None,
-            menu_pdf_filename=menu_pdf_filename if menu_pdf_filename else None,
+            menu_pdf_bucket_name=menu_pdf_bucket_name,
+            menu_pdf_filename=menu_pdf_filename,
             notification_email=notification_email,
             env=env,
             description=f"CI/CD Pipeline for {site_name}",
