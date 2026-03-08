@@ -241,9 +241,47 @@ class WebsitePipelineStack(Stack):
             )
         )
 
-        # Use buildspec from repository (infra/buildspec.yml)
-        # This allows each website to customize its build process
-        buildspec = codebuild.BuildSpec.from_source_filename("infra/buildspec.yml")
+        # Create standardized buildspec for all websites
+        # All websites must follow: site/ for Next.js, infra/ for CDK
+        buildspec = codebuild.BuildSpec.from_object({
+            "version": "0.2",
+            "phases": {
+                "install": {
+                    "runtime-versions": {
+                        "nodejs": "20",
+                        "python": "3.12",
+                    },
+                },
+                "pre_build": {
+                    "commands": [
+                        "echo 'Installing Node.js dependencies...'",
+                        "cd site",
+                        "npm install",
+                        "cd ..",
+                    ],
+                },
+                "build": {
+                    "commands": [
+                        "echo 'Installing AWS CDK CLI...'",
+                        "npm install -g aws-cdk",
+                        "echo 'Building Next.js site...'",
+                        "cd site",
+                        "npm run build",
+                        "cd ..",
+                        "echo 'Installing Python dependencies...'",
+                        "cd infra",
+                        "pip install -r requirements.txt",
+                        "echo 'Setting PYTHONPATH for local shared-website-constructs...'",
+                        "export PYTHONPATH=\"${PYTHONPATH}:$(pwd)\"",
+                        "echo 'Deploying with CDK...'",
+                        "cdk deploy --all --require-approval never",
+                    ],
+                },
+            },
+            "artifacts": {
+                "files": ["**/*"],
+            },
+        })
 
         # Create CodeBuild project
         project = codebuild.Project(
