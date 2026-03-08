@@ -18,9 +18,9 @@
     {
       "siteName": "dtl-global-website",
       "githubRepo": "dtl_global",
-      "domainName": "",
+      "domainName": "dtl-global.org",
       "hostedZoneId": "",
-      "hostedZoneName": "",
+      "hostedZoneName": "dtl-global.org",
       "menuPdfEnabled": false
     }
   ]
