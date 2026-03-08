@@ -256,7 +256,7 @@ class WebsitePipelineStack(Stack):
                     "commands": [
                         "echo 'Installing Node.js dependencies...'",
                         "cd site",
-                        "npm ci",
+                        "npm install",
                         "cd ..",
                     ],
                 },
