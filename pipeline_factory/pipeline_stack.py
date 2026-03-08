@@ -241,8 +241,8 @@ class WebsitePipelineStack(Stack):
             )
         )
 
-        # Create buildspec with CDK CLI installation
-        # Note: Each website can customize this by modifying the pipeline stack
+        # Create standardized buildspec for all websites
+        # All websites must follow: site/ for Next.js, infra/ for CDK
         buildspec = codebuild.BuildSpec.from_object({
             "version": "0.2",
             "phases": {
