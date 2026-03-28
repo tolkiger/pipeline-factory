@@ -22,6 +22,16 @@
       "hostedZoneId": "Z0743904QUT0PQD0XQ83",
       "hostedZoneName": "dtl-global.org",
       "menuPdfEnabled": false
+    },
+    {
+      "siteName": "business-center-solutions-website",
+      "githubRepo": "tolkiger/businesscenter",
+      "domainName": "businesscentersolutions.net",
+      "hostedZoneId": "Z09407773RQMA0D8M41UT",
+      "hostedZoneName": "businesscentersolutions.net",
+      "menuPdfEnabled": false,
+      "externalDns": true,
+      "certificateArn": "arn:aws:acm:us-east-1:485815740327:certificate/dcef9bcd-0e87-4142-86b4-db690eb74b7e"
     }
   ]
 }
