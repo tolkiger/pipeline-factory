@@ -41,6 +41,8 @@ class WebsitePipelineStack(Stack):
         menu_pdf_bucket_name: Optional[str] = None,
         menu_pdf_filename: Optional[str] = None,
         notification_email: Optional[str] = None,
+        external_dns: bool = False,
+        certificate_arn: Optional[str] = None,
         **kwargs
     ) -> None:
         """
@@ -58,6 +60,8 @@ class WebsitePipelineStack(Stack):
             menu_pdf_bucket_name: Custom menu bucket name (optional)
             menu_pdf_filename: Menu PDF filename (optional)
             notification_email: Email for pipeline failure notifications (optional)
+            external_dns: Whether DNS is managed by external provider (e.g., GoDaddy) instead of Route 53
+            certificate_arn: ACM certificate ARN (us-east-1) when external_dns is True
         """
         super().__init__(scope, construct_id, **kwargs)
 
@@ -72,6 +76,8 @@ class WebsitePipelineStack(Stack):
         self._menu_pdf_bucket_name = menu_pdf_bucket_name or ""
         self._menu_pdf_filename = menu_pdf_filename or ""
         self._notification_email = notification_email
+        self._external_dns = external_dns  # Whether DNS is managed externally (e.g., GoDaddy)
+        self._certificate_arn = certificate_arn or ""  # ACM certificate ARN for external DNS mode
 
         # Create resources
         self._notification_topic = self._create_notification_topic()
@@ -315,6 +321,13 @@ class WebsitePipelineStack(Stack):
                 ),
                 "MENU_PDF_FILENAME": codebuild.BuildEnvironmentVariable(
                     value=self._menu_pdf_filename
+                ),
+                # External DNS support: Pass DNS provider mode and certificate ARN to CodeBuild
+                "DNS_PROVIDER": codebuild.BuildEnvironmentVariable(
+                    value="external" if self._external_dns else "route53"
+                ),
+                "ACM_CERTIFICATE_ARN": codebuild.BuildEnvironmentVariable(
+                    value=self._certificate_arn
                 ),
             },
             build_spec=buildspec,
