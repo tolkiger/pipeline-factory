@@ -46,6 +46,9 @@ def main():
         menu_pdf_enabled = website.get("menuPdfEnabled", False)
         menu_pdf_bucket_name = website.get("menuPdfBucketName", "")
         menu_pdf_filename = website.get("menuPdfFilename", "")
+        # External DNS support: Read externalDns and certificateArn fields (defaults ensure backward compatibility)
+        external_dns = website.get("externalDns", False)  # Default: Route 53 manages DNS
+        certificate_arn = website.get("certificateArn", "")  # Default: Create new ACM certificate
 
         # Create pipeline stack with site name as stack ID
         WebsitePipelineStack(
@@ -62,6 +65,8 @@ def main():
             menu_pdf_bucket_name=menu_pdf_bucket_name,
             menu_pdf_filename=menu_pdf_filename,
             notification_email=notification_email,
+            external_dns=external_dns,  # Pass external DNS flag to pipeline stack
+            certificate_arn=certificate_arn,  # Pass certificate ARN for external DNS mode
             env=env,
             description=f"Website Management CI/CD Pipeline for {site_name}",
         )
